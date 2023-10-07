@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -22,6 +21,7 @@ public class Transaction {
     private String status;
     private double amount;
     private BigDecimal availableBalance;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
