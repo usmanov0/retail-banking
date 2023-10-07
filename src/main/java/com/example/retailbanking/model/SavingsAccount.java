@@ -19,5 +19,8 @@ public class SavingsAccount {
     private Integer accountNumber;
     private BigDecimal accountBalance;
     @OneToMany(mappedBy = "savingsAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SavingsTransaction> savingsTransactions;
+    private List<SavingsTransaction> savingsTransactionsList;
+
+
+
 }

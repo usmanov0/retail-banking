@@ -12,21 +12,20 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SavingsTransaction {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Transaction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date date;
     private String description;
     private String type;
     private String status;
-    private Double amount;
+    private double amount;
     private BigDecimal availableBalance;
-
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public SavingsTransaction(Date date, String depositToSavingsAccount, String account, String finished, double amount, BigDecimal accountBalance, SavingsAccount savingsAccount) {
+    public Transaction(Date date, String depositToCurrentAccount, String account, String finished, double amount, BigDecimal accountBalance, Account account1) {
     }
 }

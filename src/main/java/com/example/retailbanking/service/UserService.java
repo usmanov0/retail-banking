@@ -1,5 +1,7 @@
 package com.example.retailbanking.service;
 
-public interface UserService {
+import com.example.retailbanking.model.User;
 
+public interface UserService {
+    User findByUsername(String username);
 }
