@@ -25,4 +25,6 @@ public class UserRole {
     private Role role;
 
 
+    public UserRole(User user, Role roleAdmin) {
+    }
 }

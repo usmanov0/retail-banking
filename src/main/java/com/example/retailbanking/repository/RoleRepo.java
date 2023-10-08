@@ -5,4 +5,5 @@ import com.example.retailbanking.security.Role;
 import org.springframework.data.repository.CrudRepository;
 
 public interface RoleRepo extends CrudRepository<Role, Long> {
+    Role findByName(String roleAdmin);
 }
