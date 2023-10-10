@@ -1,13 +1,12 @@
 package com.example.retailbanking.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,4 +18,7 @@ public class Account {
     private Long id;
     private Integer accountNumber;
     private BigDecimal AccountBalance;
+
+    @OneToMany
+    private List<Transaction> transactionList;
 }

@@ -24,7 +24,7 @@ public interface TransactionService {
 
     List<Recipient> findRecipientList(Principal principal);
 
-    void saveRecipient(Recipient recipient);
+    Recipient saveRecipient(Recipient recipient);
 
     Recipient findRecipientByName(String recipientName);
 

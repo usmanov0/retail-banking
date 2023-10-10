@@ -1,6 +1,7 @@
 package com.example.retailbanking.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,8 @@ public class SavingsAccount {
     private Integer accountNumber;
     private BigDecimal accountBalance;
 
-    @OneToMany
+    @OneToMany(mappedBy = "savingsAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<SavingsTransaction> savingsTransactionsList;
 
 

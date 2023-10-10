@@ -80,7 +80,7 @@ public class TransferController {
         return "recipient";
     }
 
-    @RequestMapping(value = "/recipient/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/recipient/delete", method = RequestMethod.GET)
     @Transactional
     public String recipientDelete(@RequestParam(value = "recipientName")String recipientName, Model model, Principal principal){
         transactionService.deleteRecipientByName(recipientName);

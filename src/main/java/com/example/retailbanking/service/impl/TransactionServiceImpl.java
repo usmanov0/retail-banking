@@ -23,32 +23,38 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void saveCurrentDepositTransaction(Transaction transaction) {
-
+        transactionRepo.save(transaction);
     }
 
     @Override
     public void saveSavingsDepositTransaction(SavingsTransaction savingsTransaction) {
-
+        savingsTransactionRepo.save(savingsTransaction);
     }
 
     @Override
     public void saveCurrentWithDrawTransaction(Transaction transaction) {
-
+        transactionRepo.save(transaction);
     }
 
     @Override
     public void saveSavingsWithDrawTransaction(SavingsTransaction savingsTransaction) {
-
+        savingsTransactionRepo.save(savingsTransaction);
     }
 
     @Override
     public List<Transaction> findTransactionList(String name) {
-        return null;
+        User user = userService.findByUsername(name);
+        List<Transaction> transactionList = user.getAccount().getTransactionList();
+
+        return transactionList;
     }
 
     @Override
     public List<SavingsTransaction> findSavingTransactionList(String name) {
-        return null;
+        User user = userService.findByUsername(name);
+        List<SavingsTransaction> savingsTransactionList = user.getSavingsAccount().getSavingsTransactionsList();
+
+        return savingsTransactionList;
     }
 
     @Override
@@ -58,21 +64,21 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Recipient> findRecipientList(Principal principal) {
-        return null;
+        return (List<Recipient>) recipientRepo.findByName(String.valueOf(principal));
     }
 
     @Override
-    public void saveRecipient(Recipient recipient) {
-
+    public Recipient saveRecipient(Recipient recipient) {
+        return recipientRepo.save(recipient);
     }
 
     @Override
     public Recipient findRecipientByName(String recipientName) {
-        return null;
+        return recipientRepo.findByName(recipientName);
     }
 
     @Override
     public void deleteRecipientByName(String recipientName) {
-
+        recipientRepo.deleteByName(recipientName);
     }
 }
