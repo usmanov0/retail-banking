@@ -73,9 +73,4 @@ public class AccountController {
         accountService.withdraw(accountType, Double.parseDouble(amount), principal);
         return "redirect:/userFront";
     }
-
-
-
-
-
 }
