@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.naming.InsufficientResourcesException;
 import java.security.Principal;
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class TransferController {
     @RequestMapping(value = "/betweenAccounts", method = RequestMethod.POST)
     public String betweenAccountsPost(@ModelAttribute ("Transfer From ") String TransferFrom,
                                       @ModelAttribute ("Transfer To ") String TransferTo,
-                                      @ModelAttribute ("Amount ") String amount,
-                                      Principal principal){
+                                      @ModelAttribute ("Amount ") Double amount,
+                                      Principal principal) throws InsufficientResourcesException {
         User user = userService.findByUsername(principal.getName());
         Account account = user.getAccount();
         SavingsAccount savingsAccount = user.getSavingsAccount();
