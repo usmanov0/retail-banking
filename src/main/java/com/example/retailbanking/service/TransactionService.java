@@ -3,6 +3,7 @@ package com.example.retailbanking.service;
 import com.example.retailbanking.model.*;
 import org.springframework.stereotype.Service;
 
+import javax.naming.InsufficientResourcesException;
 import java.security.Principal;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface TransactionService {
 
     List<SavingsTransaction> findSavingTransactionList(String name);
 
-    void betweenAccountsTransfer(String transferFrom, String transferTo, String amount, Account account, SavingsAccount savingsAccount);
+    void betweenAccountsTransfer(String transferFrom, String transferTo, Double amount, Account account, SavingsAccount savingsAccount) throws InsufficientResourcesException;
 
     List<Recipient> findRecipientList(Principal principal);
 
