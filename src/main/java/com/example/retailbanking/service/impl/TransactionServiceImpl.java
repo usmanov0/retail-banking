@@ -6,7 +6,10 @@ import com.example.retailbanking.service.TransactionService;
 import com.example.retailbanking.service.UserService;
 import org.springframework.stereotype.Service;
 
+import javax.naming.InsufficientResourcesException;
+import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,7 +20,6 @@ public class TransactionServiceImpl implements TransactionService {
     private AccountRepo accountRepo;
     private SavingsAccountRepo savingsAccountRepo;
     private RecipientRepo recipientRepo;
-
 
 
 
@@ -58,8 +60,48 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void betweenAccountsTransfer(String transferFrom, String transferTo, String amount, Account account, SavingsAccount savingsAccount) {
+    public void betweenAccountsTransfer(String transferFrom, String transferTo, Double amount, Account account, SavingsAccount savingsAccount) throws InsufficientResourcesException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Transfer amount must be greater than zero.");
+        }
 
+        User user = userService.findByUsername(transferFrom);
+        if (user == null) throw  new IllegalArgumentException("Invalid source account");
+        Account sourceAccount = user.getAccount();
+        SavingsAccount sourceSavingsAccount = user.getSavingsAccount();
+
+        if (account != null && account.equals(sourceAccount)){
+            if (amount > sourceAccount.getAccountBalance().doubleValue()){
+                throw new InsufficientResourcesException("Insufficient funds in the source account");
+            }
+            sourceAccount.setAccountBalance(sourceAccount.getAccountBalance().subtract(BigDecimal.valueOf(amount)));
+            savingsAccount.setAccountBalance(savingsAccount.getAccountBalance().add(BigDecimal.valueOf(amount)));
+
+            Transaction withdrawalTransaction = new Transaction(new Date(), "Transfer to savings account",
+                    "Account", "Finished", amount, sourceAccount.getAccountBalance(), sourceAccount);
+            Transaction depositTransaction = new Transaction(new Date(), "Transfer from Current Account",
+                    "Account", "Finished", amount, savingsAccount.getAccountBalance(), account);
+            transactionRepo.save(withdrawalTransaction);
+            transactionRepo.save(depositTransaction);
+        }else if (savingsAccount != null && savingsAccount.equals(sourceSavingsAccount)){
+            if (amount > sourceSavingsAccount.getAccountBalance().doubleValue()){
+                throw new InsufficientResourcesException("Insufficient funds in the source account.");
+            }
+            sourceSavingsAccount.setAccountBalance(sourceSavingsAccount.getAccountBalance().subtract(BigDecimal.valueOf(amount)));
+            account.setAccountBalance(account.getAccountBalance().add(BigDecimal.valueOf(amount)));
+
+            SavingsTransaction withdrawalTransaction = new SavingsTransaction(new Date(), "Transfer to Current Account",
+                    "Account", "Finished", amount, sourceSavingsAccount.getAccountBalance(), sourceSavingsAccount);
+            SavingsTransaction depositTransaction = new SavingsTransaction(new Date(), "Transfer from Savings Account",
+                    "Account", "Finished", amount, account.getAccountBalance(), savingsAccount);
+            savingsTransactionRepo.save(withdrawalTransaction);
+            savingsTransactionRepo.save(depositTransaction);
+        }else {
+            throw new IllegalArgumentException("Invalid source account for transfer");
+        }
+
+        accountRepo.save(sourceAccount);
+        savingsAccountRepo.save(sourceSavingsAccount);
     }
 
     @Override
